@@ -1,0 +1,82 @@
+version: '3.7'
+
+services:
+  postgres_db:
+    image: postgres:15
+    hostname: postgres_db
+    container_name: postgres_shortener_db
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fastapi
+    ports:
+      - '5432:5432'
+    networks:
+      - shortener-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d shortener"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+  redis:
+    image: redis
+    hostname: redis
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - shortener-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
+  server:
+    # hostname: short.ner
+    build: 
+      context: .  
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    stdin_open: true
+    tty: true  # Keeps the container running for debugging
+    environment:
+      - DB_HOST=postgres_db
+      - DB_USER=postgres
+      - DB_PASSWORD=fastapi
+      - DB_NAME=postgres
+      - REDIS_URL=redis://redis:6379
+      - RATE_LIMIT_TIMES=10
+      - RATE_LIMIT_SECONDS=600
+      # - HOST_NAME=localhost:8000
+    # healthcheck:
+    #   test: ["CMD", "curl --fail http://localhost:8000 || exit 1"]
+    #   interval: 5s
+    #   timeout: 2s
+    #   retries: 20
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env.prod
+    networks:
+      - shortener-network
+
+
+networks:
+  shortener-network:
+    name: shortener-network
+
+
+# docker run --name my-redis-server -p 6379:6379 -d redis redis-server  --loglevel warning
+# To build it use this command : docker compose -f docker-compose.yml up --build -d
+# docker compose -f docker-compose.yml up --build -d
+# docker compose -f docker-compose.yml down --remove-orphans
+# docker exec -it <container name> /bin/bash
+#docker-compose run --rm server pytest -v tests/

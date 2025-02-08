@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>URL Shortener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    form {
+      margin-bottom: 1rem;
+    }
+    input[type="url"] {
+      width: 300px;
+      padding: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    async function shortenUrl(event) {
+      event.preventDefault();
+      const longUrl = document.getElementById("longUrl").value;
+      try {
+        const response = await fetch('/shorten/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ long_url: longUrl })
+        });
+
+        if (!response.ok) {
+            if(response.status == 429) {
+                throw new Error('Too many requests. Please try again after 10 minutes.');
+            } else {
+                throw new Error('Error shortening URL');
+            }
+        }
+
+        const data = await response.json();
+        
+        document.getElementById("result").innerHTML = 
+          `Short URL: <a href="${data.short_url.split("/")[1]}" target="_blank">${data.short_url}</a>`;
+      } catch (error) {
+        document.getElementById("result").textContent = error.message;
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>URL Shortener</h1>
+  <form onsubmit="shortenUrl(event)">
+    <input type="url" id="longUrl" placeholder="Enter your long URL here" required>
+    <button type="submit">Shorten URL</button>
+  </form>
+  <div id="result"></div>
+</body>
+</html>
