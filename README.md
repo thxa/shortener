@@ -8,7 +8,11 @@
 
 
 ## Algorithm Used to Generate the Short Code
+### Current Alogrithm
 The algorithm converts the latest id from the url_mappings table into a Base62 encoded string using a custom conversion function.
+
+### Alternative Approach
+An alternative idea is to generate a hash directly from the URL itself.
 
 ## Technologies Used 
 - Python
