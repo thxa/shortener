@@ -25,9 +25,14 @@ An alternative idea is to generate a hash directly from the URL itself.
 - docker-compose
 
 ## How to run the project
-<code>
+```bash
 docker compose -f src/docker-compose.yml up --build -d
-</code>
+```
+
+## How to stop the project 
+```bash
+docker compose -f src/docker-compose.yml down --remove-orphans
+```
 
 ## Web Interface for API Interaction
 Access the interactive API documentation at:
@@ -37,10 +42,6 @@ Access the interactive API documentation at:
 Access the full API documentation at:
 [http://127.0.0.1:8000/docs/](http://127.0.0.1:8000/docs/)
 
-## How to stop the project 
-<code>
-docker compose -f src/docker-compose.yml down --remove-orphans
-</code>
 
 
 
