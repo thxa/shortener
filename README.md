@@ -34,9 +34,10 @@ docker compose -f src/docker-compose.yml up --build -d
 docker compose -f src/docker-compose.yml down --remove-orphans
 ```
 
-## Web Interface for API Interaction
-Access the interactive API documentation at:
+## App Web Interface
+Visit the app at:
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+
 
 ## API Documentation
 Access the full API documentation at:
