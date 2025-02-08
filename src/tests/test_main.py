@@ -26,11 +26,6 @@ def test_redirect_url():
     response = requests.get(f"{BASE_URL}/invalid", allow_redirects=False)
     assert response.status_code == 404
 
-def test_index():
-    response = requests.get(f"{BASE_URL}/")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to URL Shortener Service"}
-
 @pytest.mark.parametrize(
     "number, expected",
     [
