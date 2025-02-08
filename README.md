@@ -20,7 +20,6 @@ The algorithm converts the latest id from the url_mappings table into a Base62 e
 ## Requirements
 - docker-compose
 
-
 ## How to run the project
 <code>
 docker compose -f src/docker-compose.yml up --build -d
@@ -32,8 +31,7 @@ Access the interactive API documentation at:
 
 ## API Documentation
 Access the full API documentation at:
-- http://127.0.0.1:8000/docs
-
+[http://127.0.0.1:8000/docs/](http://127.0.0.1:8000/docs/)
 
 ## How to stop the project 
 <code>
